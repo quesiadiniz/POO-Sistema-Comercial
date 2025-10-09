@@ -35,27 +35,68 @@ class Pedido {
         return total;
     }
     public boolean aplicarCupom(String codigo) {
-        // TODO: recusar se já aplicado
-        // TODO: cupom só faz sentido se houver ao menos 1 item
-        // TODO: aceitar PROMO10 (10%) e PROMO5 (5%). Outros → false
-        // TODO: gravar estado interno (cupomAplicado, cupomCodigo, descontoPercent) e retornar true
+        // TDO: recusar se já aplicado
+        if (cupomAplicado == true) {
+            return false;
+        }
+        else if (qtd==0) {
+            return false;
+        }
+        else if (!codigo.equals("PROMO10") && !codigo.equals("PROMO5") ){
+            return false;
+        }
+        else if (codigo.equals("PROMO10")){
+            descontoPercent = 0.1;
+            cupomAplicado = true;
+            cupomCodigo = codigo;
+            return true;
+        }
+         else if (codigo.equals("PROMO5")){
+            descontoPercent = 0.05;
+            cupomAplicado = true;
+            cupomCodigo = codigo;
+            return true;
+        }
+        // TOO: cupom só faz sentido se houver ao menos 1 item
+        // TDO: aceitar PROMO10 (10%) e PROMO5 (5%). Outros → false
+        // TDO: gravar estado interno (cupomAplicado, cupomCodigo, descontoPercent) e retornar true
         return false;
     }
+
     public double calcularTaxa(double taxaPercent) {
-        // TODO: taxaPercent deve estar entre 0 e 20 (inclusive)
-        // TODO: base da taxa = subtotal - desconto
-        // TODO: retornar valor da taxa (double)
-        return 0.0;
+        if (taxaPercent < 0 || taxaPercent > 20){
+            System.out.println("Valor de Taxa inválido! Deve ser entre 0 e 20 (inclusive).");
+        }
+
+        double subtotal = calcularSubtotal();
+
+        double desconto = subtotal * descontoPercent;
+        double baseDaTaxa = subtotal - desconto;
+
+        double valorDaTaxa = baseDaTaxa * (taxaPercent/100.0);
+
+        // TDO: taxaPercent deve estar entre 0 e 20 (inclusive)
+        // TDO: base da taxa = subtotal - desconto
+        // TDO: retornar valor da taxa (double)
+        return valorDaTaxa;
     }
     public double calcularTotal(double taxaPercent) {
-        // TODO: usar calcularSubtotal(), descontoPercent, calcularTaxa(taxaPercent)
-        // TODO: total = subtotal - desconto + taxa
-        return 0.0;
+
+        double total = 0.0;
+
+        double subtotal = calcularSubtotal();
+        double desconto = subtotal * descontoPercent;
+        double taxa = calcularTaxa(taxaPercent);
+
+        total = subtotal - desconto + taxa;
+        // TDO: usar calcularSubtotal(), descontoPercent, calcularTaxa(taxaPercent)
+        // TDO: total = subtotal - desconto + taxa
+        return total;
     }
     public String gerarRelatorio(double taxaPercent) {
         double subtotal = calcularSubtotal();
         double desconto = subtotal * (descontoPercent / 100.0);
-        double baseTaxa = subtotal - desconto;
+        //double baseTaxa = subtotal - desconto;
         double taxa = calcularTaxa(taxaPercent);
         double total = subtotal - desconto + taxa;
         StringBuilder sb = new StringBuilder();
