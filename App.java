@@ -9,7 +9,8 @@ public class App {
         while (true) {
             System.out.print("Nome do item (ou ENTER p/ finalizar): ");
             String nome = in.nextLine().trim();
-            if (nome.isEmpty()) break;
+            if (nome.isEmpty()) 
+            break;
             double preco = lerDoubleNaoNegativo(in, "Preço do item: ");
             if (!pedido.adicionarItem(new Item(nome, preco))) {
                 System.out.println("Carrinho cheio! Finalizando...");

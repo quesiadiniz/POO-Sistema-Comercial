@@ -6,18 +6,24 @@ class Pedido {
     private boolean cupomAplicado = false;
     private String cupomCodigo = "";
     private double descontoPercent = 0.0; // 0, 5 ou 10
-    public Pedido() { this(10); }
+
+    public Pedido() { 
+        this(10); 
+    }
+
     public Pedido(int capacidade) {
         if (capacidade <= 0) throw new IllegalArgumentException("Capacidade inválida");
         this.itens = new Item[capacidade];
         this.qtd = 0;
     }
+
     public boolean adicionarItem(Item item) {
         if (item == null) return false; // defensivo
         if (qtd == itens.length) return false;
         itens[qtd++] = item;
         return true;
     }
+
     public void listarItens() {
         if (qtd == 0) {
             System.out.println("(sem itens)");
@@ -27,6 +33,7 @@ class Pedido {
             System.out.println((i + 1) + ". " + itens[i]);
         }
     }
+
     public double calcularSubtotal() {
         double total = 0.0;
         for (int i = 0; i < qtd; i++) {
@@ -34,6 +41,7 @@ class Pedido {
         }
         return total;
     }
+
     public boolean aplicarCupom(String codigo) {
         // TDO: recusar se já aplicado
         if (cupomAplicado == true) {
@@ -46,13 +54,13 @@ class Pedido {
             return false;
         }
         else if (codigo.equals("PROMO10")){
-            descontoPercent = 0.1;
+            descontoPercent = 10.0;
             cupomAplicado = true;
             cupomCodigo = codigo;
             return true;
         }
          else if (codigo.equals("PROMO5")){
-            descontoPercent = 0.05;
+            descontoPercent = 5.0;
             cupomAplicado = true;
             cupomCodigo = codigo;
             return true;
@@ -70,7 +78,7 @@ class Pedido {
 
         double subtotal = calcularSubtotal();
 
-        double desconto = subtotal * descontoPercent;
+        double desconto = subtotal * (descontoPercent/100.0);
         double baseDaTaxa = subtotal - desconto;
 
         double valorDaTaxa = baseDaTaxa * (taxaPercent/100.0);
@@ -80,12 +88,13 @@ class Pedido {
         // TDO: retornar valor da taxa (double)
         return valorDaTaxa;
     }
+
     public double calcularTotal(double taxaPercent) {
 
         double total = 0.0;
 
         double subtotal = calcularSubtotal();
-        double desconto = subtotal * descontoPercent;
+        double desconto = subtotal * (descontoPercent/100.0);
         double taxa = calcularTaxa(taxaPercent);
 
         total = subtotal - desconto + taxa;
@@ -93,6 +102,7 @@ class Pedido {
         // TDO: total = subtotal - desconto + taxa
         return total;
     }
+
     public String gerarRelatorio(double taxaPercent) {
         double subtotal = calcularSubtotal();
         double desconto = subtotal * (descontoPercent / 100.0);
@@ -119,12 +129,22 @@ class Pedido {
         sb.append("TOTAL: R$ ").append(moeda(total)).append("\n");
         return sb.toString();
     }
+
     public static String moeda(double v) {
         // Centraliza formatação com 2 casas decimais
         return String.format("%.2f", v);
     }
+
     // Getters úteis para testes (opcional)
-    public boolean isCupomAplicado() { return cupomAplicado; }
-    public String getCupomCodigo() { return cupomCodigo; }
-    public double getDescontoPercent() { return descontoPercent; }
+    public boolean isCupomAplicado() { 
+        return cupomAplicado; 
+    }
+
+    public String getCupomCodigo() { 
+        return cupomCodigo; 
+    }
+
+    public double getDescontoPercent() { 
+        return descontoPercent; 
+    }
 }
